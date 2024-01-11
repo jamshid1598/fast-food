@@ -1,0 +1,129 @@
+[
+{
+    "model": "user.filteroptions",
+    "pk": 1,
+    "fields": {
+        "created_at": "2023-11-29T05:37:32.894Z",
+        "updated_at": "2023-11-29T05:37:32.894Z",
+        "updated_by": null,
+        "created_by": "b3f5603f-b9b5-4dd8-831a-11a8a459884a",
+        "gender": null,
+        "age_from": null,
+        "age_till": null,
+        "hobbies": [],
+        "countries": []
+    }
+},
+{
+    "model": "user.filteroptions",
+    "pk": 2,
+    "fields": {
+        "created_at": "2023-11-29T08:56:42.565Z",
+        "updated_at": "2023-12-15T13:22:31.880Z",
+        "updated_by": "1ad0331e-30cb-43c7-8380-07bec75c800a",
+        "created_by": "1ad0331e-30cb-43c7-8380-07bec75c800a",
+        "gender": "male",
+        "age_from": 17,
+        "age_till": 39,
+        "hobbies": [
+            7,
+            3,
+            2,
+            1
+        ],
+        "countries": [
+            6,
+            18,
+            19,
+            20,
+            23,
+            24,
+            182,
+            236
+        ]
+    }
+},
+{
+    "model": "user.filteroptions",
+    "pk": 3,
+    "fields": {
+        "created_at": "2023-12-06T14:35:12.065Z",
+        "updated_at": "2023-12-06T14:47:25.060Z",
+        "updated_by": "7eae406f-c578-4a46-a6bd-0e00a0d06e4c",
+        "created_by": "7eae406f-c578-4a46-a6bd-0e00a0d06e4c",
+        "gender": "female",
+        "age_from": 19,
+        "age_till": 21,
+        "hobbies": [
+            7
+        ],
+        "countries": [
+            118,
+            236
+        ]
+    }
+},
+{
+    "model": "user.filteroptions",
+    "pk": 5,
+    "fields": {
+        "created_at": "2023-12-08T09:56:36.756Z",
+        "updated_at": "2023-12-08T09:58:42.501Z",
+        "updated_by": "ebf0d1d8-a2a6-45e6-bad7-4f60031766d9",
+        "created_by": "ebf0d1d8-a2a6-45e6-bad7-4f60031766d9",
+        "gender": "male",
+        "age_from": 24,
+        "age_till": 40,
+        "hobbies": [
+            7
+        ],
+        "countries": [
+            7,
+            13,
+            24,
+            30,
+            38,
+            52,
+            236
+        ]
+    }
+},
+{
+    "model": "user.filteroptions",
+    "pk": 6,
+    "fields": {
+        "created_at": "2023-12-08T12:27:15.107Z",
+        "updated_at": "2023-12-08T12:36:04.615Z",
+        "updated_by": "eb508891-2c8d-42cb-a974-929d0af59caa",
+        "created_by": "eb508891-2c8d-42cb-a974-929d0af59caa",
+        "gender": "male",
+        "age_from": 21,
+        "age_till": 32,
+        "hobbies": [
+            1
+        ],
+        "countries": [
+            236
+        ]
+    }
+},
+{
+    "model": "user.filteroptions",
+    "pk": 7,
+    "fields": {
+        "created_at": "2023-12-10T09:57:38.943Z",
+        "updated_at": "2023-12-13T12:04:00.952Z",
+        "updated_by": "3b033f23-98c4-4011-8073-4d46ba5e26ff",
+        "created_by": "3b033f23-98c4-4011-8073-4d46ba5e26ff",
+        "gender": "female",
+        "age_from": 24,
+        "age_till": 18,
+        "hobbies": [
+            1
+        ],
+        "countries": [
+            236
+        ]
+    }
+}
+]

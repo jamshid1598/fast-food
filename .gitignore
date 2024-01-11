@@ -1,0 +1,17 @@
+nginx/
+prod/
+env/
+venv/
+
+__pycache__/
+static_root/
+staticfiles/
+media/
+media_root/
+
+*.sqlite
+*.sqlite3
+
+DS_Store
+.DS_Store/
+.DS_Store
