@@ -1,25 +1,24 @@
 from django.core.cache import cache
 from django.conf import settings
 
-from django.utils.translation import gettext_lazy as _
+from rest_framework.response import Response
+from rest_framework import status
 
-from user.api.utils.eskiz import SendOTP
-from user.api.utils.email import SendEmailOTP
+from users.api.utils.eskiz import SendOTP
 from config.extensions.utils import otp_generator, get_client_ip
 
 
-def send_otp(request, phone_email):
-    with_email = SendEmailOTP()
-    with_sms = SendOTP()
+def send_otp(request, phone):
     otp = otp_generator()
     ip = get_client_ip(request)
+    cache.set(f"{ip}-for-authentication", phone, settings.EXPIRY_TIME_OTP)
+    cache.set(phone, otp, settings.EXPIRY_TIME_OTP)
 
-    cache.set(f"{ip}-for-authentication", phone_email, settings.EXPIRY_TIME_OTP)
-    cache.set(phone_email, otp, settings.EXPIRY_TIME_OTP)
+    if settings.DEBUG:
+        context = {"otp": f"{otp}"}
+        return Response(context, status=status.HTTP_200_OK,)
 
-    if phone_email.isdigit():
-        response = with_sms.send_otp(phone_email, otp)
-    else:
-        response = with_email.send_otp(phone_email, otp)
+    obj = SendOTP()
+    response = obj.send_otp(phone, otp)
 
     return response

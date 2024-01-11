@@ -16,7 +16,7 @@ import json
 
 
 class ViewsTest(APITestCase):
-
+    
     def setUp(self) -> None:
         cache.clear()
 

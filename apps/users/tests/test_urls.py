@@ -7,7 +7,7 @@ from user.api.views import user
 
 
 class UrlsTest(SimpleTestCase):
-
+    
     def test_app_name(self):
         self.assertEquals(resolve("/users/api/").app_name, "user:user-api")
 

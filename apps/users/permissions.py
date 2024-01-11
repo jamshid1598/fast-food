@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
@@ -11,7 +12,7 @@ class IsSuperUser(BasePermission):
 
 
 class IsSuperUserOrReadOnly(BasePermission):
-
+    
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
@@ -26,7 +27,8 @@ class IsSuperUserOrAuthor(BasePermission):
 
     def has_permission(self, request, view):
         return bool(
-            request.user.is_authenticated and (request.user.is_superuser or request.user.author)
+            request.user.is_authenticated and request.user.is_superuser or
+            request.user.is_authenticated and request.user.author
         )
 
 
@@ -37,16 +39,14 @@ class IsSuperUserOrAuthorOrReadOnly(BasePermission):
             return True
 
         return bool(
-            request.user.is_authenticated and (request.user.is_superuser or obj.author == request.user)
+            request.user.is_authenticated and request.user.is_superuser or
+            request.user.is_authenticated and obj.author == request.user 
         )
 
 
-class IsAdminOrReadOnly(BasePermission):
+class IsDriver(BasePermission):
 
     def has_permission(self, request, view):
-        if request.method in SAFE_METHODS:
-            return True
-
         return bool(
-            request.user.is_authenticated and request.user.is_staff
+            request.user.is_authenticated and request.user.is_driver
         )

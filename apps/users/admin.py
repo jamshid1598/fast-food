@@ -6,15 +6,13 @@ from users.models import Users, SMSToken, OTPStatus
 
 
 class UserAdmin(BaseUserAdmin):
-
     fieldsets = (
         (_('User Info'),
             {'fields': (
                 "first_name",
                 "last_name",
-                "username",
                 "phone",
-                "email",
+                "user_type",
                 "two_step_password",
             )
         }),
@@ -32,12 +30,12 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (_("create new user"), {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2')
+            'fields': ('phone', 'password1', 'password2')
         }),
     )
 
     list_display = (
-        'first_name', 'last_name', 'username', 'phone', 'email',
+        'first_name', 'last_name', 'phone', 'user_type',
         'two_step_password', 'is_staff', 'is_superuser', 'is_active',
         'last_login', 'updated_at', 'created_at',
     )
@@ -46,14 +44,13 @@ class UserAdmin(BaseUserAdmin):
         'updated_at', 'created_at',
     )
     ordering = (
-        'first_name', 'last_name', 'username', 'phone', 'email',
+        'first_name', 'last_name', 'phone',
         'two_step_password', 'is_staff', 'is_superuser', 'is_active',
         'updated_at', 'created_at',
     )
-    list_display_links = ('first_name', 'last_name', 'username', 'phone', 'email',)
-    search_fields = ('first_name', 'last_name', 'phone', 'email')
+    list_display_links = ('first_name', 'last_name', 'phone', 'user_type',)
+    search_fields = ('first_name', 'last_name', 'phone', 'passport',)
     filter_horizontal = ('groups', 'user_permissions',)
-
 
 admin.site.register(Users, UserAdmin)
 
