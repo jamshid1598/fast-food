@@ -16,8 +16,7 @@ from users.api.serializers.users import (
     OtpSerializer,
     CustomTokenRefreshSerializer,
 )
-from users.api.utils.send_otp import send_otp
-from config.extensions.utils import get_client_ip
+from users.api.utils.send_otp import send_otp, get_client_ip
 
 
 class Login(APIView):

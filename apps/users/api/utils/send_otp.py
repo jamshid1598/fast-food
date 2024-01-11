@@ -1,11 +1,23 @@
 from django.core.cache import cache
 from django.conf import settings
-
 from rest_framework.response import Response
 from rest_framework import status
-
+from string import digits
+from secrets import choice as secret_choice
 from users.api.utils.eskiz import SendOTP
-from config.extensions.utils import otp_generator, get_client_ip
+
+
+def get_client_ip(request) -> str:
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
+
+
+def otp_generator(size: int = 6, char: str = digits) -> str:
+    return "".join(secret_choice(char) for _ in range(size))
 
 
 def send_otp(request, phone):

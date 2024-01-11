@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'users.apps.UsersConfig',
-    'foods.apps.FoodsConfig',
+    'fastfood.apps.FastFoodConfig',
+    'order.apps.OrderConfig',
 ]
 
 MIDDLEWARE = [

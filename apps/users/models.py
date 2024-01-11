@@ -7,8 +7,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 from users.manager import UserManager
 
 
-class UserType(models.TextChoices):  
-    RIVER = 'driver', _('Driver')
+class UserType(models.TextChoices):
+    ADMIN = 'admin', _('Admin')
+    WAITER = 'waiter', _('Waiter')
     CLIENT = 'client', _('Client')
 
 

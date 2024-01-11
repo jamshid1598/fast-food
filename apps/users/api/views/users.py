@@ -19,7 +19,7 @@ from users.api.serializers.users import (
     UserProfileSerializer,
     GetTwoStepPasswordSerializer,
 )
-from users.permissions import IsSuperUser
+from users.permissions import IsAdmin, IsAdminOrWaiter
 
 
 @extend_schema(tags=['api.v1 users'])
@@ -31,7 +31,7 @@ class UsersList(ListAPIView):
 
     queryset = get_user_model().objects.all()
     serializer_class = UsersListSerializer
-    permission_classes = [IsSuperUser,]
+    permission_classes = [IsAdminOrWaiter,]
     filterset_fields = ["user_type",]
     search_fields = ["phone", "first_name", "last_name",]
     ordering_fields = ("id", "user_type",)
@@ -65,7 +65,7 @@ class UserDetailUpdateDelete(RetrieveUpdateDestroyAPIView):
 
     queryset = get_user_model().objects.all()
     serializer_class = UserDetailUpdateDeleteSerializer
-    permission_classes = [IsSuperUser,]
+    permission_classes = [IsAuthenticated,]
 
     def get_object(self):
         pk = self.kwargs.get("pk")

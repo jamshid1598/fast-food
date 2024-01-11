@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('change-language/', change_language, name='change_language'),
     path('users/', include('users.urls', namespace='users')),
+    path("fastfood/", include('fastfood.urls', namespace='fastfood')),
     *swagger_urls,
 ]
 
