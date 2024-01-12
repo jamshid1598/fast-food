@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'drf_yasg',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -47,7 +48,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'users.apps.UsersConfig',
-    'core.apps.CoreConfig',
+    'fastfood.apps.FastFoodConfig',
+    'order.apps.OrderConfig',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +71,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,14 +166,17 @@ EXPIRY_TIME_OTP = 300
 ESKIZ_EMAIL = os.environ.get('ESKIZ_EMAIL', default='')
 ESKIZ_PASSWORD = os.environ.get('ESKIZ_PASSWORD', default='')
 
-# email credentials
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = os.environ.get('EMAIL_HOST', default='')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', default=587)
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', default=True)
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', default='')
-RECIPIENT_ADDRESS = os.environ.get('RECIPIENT_ADDRESS', default='')
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": [
+            "redis://%s:%s" % (
+                os.environ.get("REDIS_HOST"),
+                os.environ.get("REDIS_PORT")
+            ),
+        ],
+    }
+}
 
 # django-rest-framework-simplejwt configurations
 SIMPLE_JWT = {
@@ -264,3 +269,26 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# drf-spectacular configuration
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'FastFood API',
+    'DESCRIPTION': 'FastFood API Docs. View */redoc/ link for more api documentation. '
+                'Github repo link https://github.com/jamshid1598/fast-food.git',
+
+
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
+    "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@3.35.1",
+    "SWAGGER_UI_FAVICON_HREF": STATIC_URL + "favicon.jpeg",
+}

@@ -2,10 +2,10 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
-from user.api.serializers.otp_status import OTPStatusSerializer
+from users.api.serializers.otp_status import OTPStatusSerializer
 
 
-@extend_schema(tags=['api.v1 otp-status (for admin)'])
+@extend_schema(tags=['api.v1 users'])
 class OTPStatusView(APIView):
     permission_classes = [permissions.AllowAny]
 

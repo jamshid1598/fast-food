@@ -6,7 +6,7 @@ from django.test import TestCase
 
 
 class ManagersTest(TestCase):
-
+    
     def test_create_user_Without_phone(self):
         with self.assertRaises(TypeError):
             user = get_user_model().objects.create_user(

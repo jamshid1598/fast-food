@@ -24,5 +24,11 @@ services:
     env_file:
       - ./env_vars/.db
 
+  redis:
+    image: redis:7.2
+    container_name: fast_food_redis
+    ports:
+     - 6379:6379
+
 volumes:
   postgres_data:

@@ -8,13 +8,12 @@ from datetime import timedelta
 
 
 class UserTest(TestCase):
-
+    
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             phone="998991231122",
             first_name="test-user-first-name",
             last_name="test-user-last-name",
-            special_user=timezone.now() + timedelta(days=30),
         )
         self.superuser = get_user_model().objects.create_superuser(
             phone="998991231122",
@@ -35,10 +34,6 @@ class UserTest(TestCase):
             f"{self.superuser.first_name} {self.superuser.last_name}",
         )
         self.assertNotEqual(self.superuser.get_full_name, f"{self.superuser.phone}")
-
-    def test_is_special_user(self):
-        self.assertTrue(self.user.is_special_user())
-        self.assertFalse(self.superuser.is_special_user())
 
     def test_model_manager_for_set_password(self):
         self.assertFalse(self.user.has_usable_password())

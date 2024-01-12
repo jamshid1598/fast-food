@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from phonenumber_field.serializerfields import PhoneNumberField
-from user.models import OTPStatus
+from users.models import OTPStatus
 
 
 class OTPStatusSerializer(serializers.Serializer):
@@ -11,7 +11,7 @@ class OTPStatusSerializer(serializers.Serializer):
     sms_count = serializers.IntegerField()
     status = serializers.CharField()
     status_date = serializers.DateTimeField()
-
+    
     def create(self, validated_data):
         instance, _ = OTPStatus.objects.get_or_create(user_sms_id=validated_data.get('user_sms_id'))
         instance.message_id = validated_data.get('message_id')

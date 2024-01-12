@@ -1,23 +1,24 @@
 import uuid
-
 from django.db import models
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
-
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-
 from users.manager import UserManager
+
+
+class UserType(models.TextChoices):
+    ADMIN = 'admin', _('Admin')
+    WAITER = 'waiter', _('Waiter')
+    CLIENT = 'client', _('Client')
 
 
 class Users(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     first_name = models.CharField(_('first name'), max_length=255, blank=True, null=True)
     last_name = models.CharField(_('last name'), max_length=255, blank=True, null=True)
-    username = models.CharField(_('username'), max_length=255, null=True, help_text=_('unique username is required'))
-    email = models.EmailField(_('email'), max_length=255, unique=True, help_text=_('email must be unique'))
-    phone = PhoneNumberField(_("phone"), max_length=100, null=True, help_text=_('phone number must be unique'))
+    phone = PhoneNumberField(_("phone"), max_length=100, unique=True, help_text=_('phone number must be required'))
+    user_type = models.CharField(_("user type"), max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     two_step_password = models.BooleanField(_("two step password"), default=False, help_text=_("is active two step password?"))
 
     is_active = models.BooleanField(_('is_active'), default=True)
@@ -29,11 +30,10 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'phone'
 
     class Meta:
         ordering = ('created_at', 'updated_at')
-        db_table = 'users_users'
         verbose_name = _('User')
         verbose_name_plural = _('Users')
 
@@ -62,6 +62,7 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['id']
 
 
 class SMSToken(BaseModel):
