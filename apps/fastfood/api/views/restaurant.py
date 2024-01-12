@@ -1,5 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.generics import (
     ListAPIView,
     CreateAPIView,
@@ -11,8 +11,8 @@ from drf_spectacular.utils import extend_schema
 
 
 from users.permissions import IsAdmin
-from fastfood.api.serializers.restaurant import RestaurantSerializer
 from fastfood.models import Restaurant
+from fastfood.api.serializers.restaurant import RestaurantSerializer
 
 
 class RestaurantList(ListAPIView):
@@ -46,7 +46,7 @@ class RestaurantCreate(CreateAPIView):
 
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
-    permission_classes = [IsAdmin,]
+    permission_classes = [IsAuthenticated,]
 
     @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={201: RestaurantSerializer})
     def post(self, request, *args, **kwargs):
@@ -63,7 +63,7 @@ class RestaurantDetail(RetrieveAPIView):
 
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [AllowAny,]
 
     @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={200: RestaurantSerializer})
     def get(self, request, *args, **kwargs):

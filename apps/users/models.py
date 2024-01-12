@@ -10,7 +10,6 @@ from users.manager import UserManager
 class UserType(models.TextChoices):
     ADMIN = 'admin', _('Admin')
     WAITER = 'waiter', _('Waiter')
-    CLIENT = 'client', _('Client')
 
 
 class Users(AbstractBaseUser, PermissionsMixin):
@@ -18,7 +17,6 @@ class Users(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=255, blank=True, null=True)
     last_name = models.CharField(_('last name'), max_length=255, blank=True, null=True)
     phone = PhoneNumberField(_("phone"), max_length=100, unique=True, help_text=_('phone number must be required'))
-    user_type = models.CharField(_("user type"), max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     two_step_password = models.BooleanField(_("two step password"), default=False, help_text=_("is active two step password?"))
 
     is_active = models.BooleanField(_('is_active'), default=True)
@@ -63,6 +61,24 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['id']
+
+
+class Employee(BaseModel):
+    user = models.OneToOneField(Users, on_delete=models.SET_NULL, related_name='employee',
+                                blank=True, null=True, verbose_name=_('user'))
+    restaurant = models.ForeignKey('fastfood.Restaurant', on_delete=models.SET_NULL, related_name='employees',
+                                   blank=True, null=True, verbose_name=_('restaurant'))
+    user_type = models.CharField(_('User type'), max_length=100, choices=UserType.choices, default=UserType.WAITER)
+
+    class Meta:
+        db_table = 'users_employees'
+        verbose_name = _('Employee')
+        verbose_name_plural = _('Employees')
+
+    def __str__(self):
+        full_name = self.user.full_name if self.user else ""
+        res_name = self.restaurant.name if self.restaurant else ""
+        return "%s %s" % (full_name, res_name)
 
 
 class SMSToken(BaseModel):

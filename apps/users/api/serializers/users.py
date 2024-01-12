@@ -12,7 +12,7 @@ class UsersListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = [
-            "id", "phone", "first_name", "last_name", "user_type",
+            "id", "phone", "first_name", "last_name",
         ]
         extra_kwargs = {
             'passport': {
@@ -41,8 +41,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = [
-            "id", "phone", "first_name", "last_name",
-            "user_type", "two_step_password",
+            "id", "phone", "first_name", "last_name", "two_step_password",
         ]
         read_only_fields = ('id', 'phone', 'two_step_password')
         extra_kwargs = {

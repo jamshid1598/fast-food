@@ -10,67 +10,68 @@ from rest_framework.generics import (
 from drf_spectacular.utils import extend_schema
 
 
-from users.permissions import IsAdmin
-from fastfood.api.serializers.restaurant import RestaurantSerializer
-from fastfood.models import Restaurant
+from users.permissions import IsAdmin, IsAdminOrWaiter
+from fastfood.api.serializers.fastfood import (
+    FastFoodSerializer, FastFoodCreateUpdateSerializer
+)
+from fastfood.models import FastFood
 
 
-class RestaurantList(ListAPIView):
+class FastFoodList(ListAPIView):
     """
     get:
-        Returns a list of all Restaurant.
+        Returns a list of fast-food list.
     """
 
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
+    queryset = FastFood.objects.all()
+    serializer_class = FastFoodSerializer
     permission_classes = [AllowAny,]
-    filterset_fields = ["name", 'address',]
-    search_fields = ["name", "address", "description"]
-    ordering_fields = ("id", "name", "address")
+    filterset_fields = ["restaurant", 'name',]
+    search_fields = ["restaurant", "name",]
+    ordering_fields = ("id", "name", "price")
 
-    def get_queryset(self):
-        return Restaurant.objects.values(
-            "id", "name", "description", "lon", "lat", "address"
-        )
-
-    @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={200: RestaurantSerializer})
+    @extend_schema(tags=['api.v1 fastfood'], request=FastFoodSerializer, responses={200: FastFoodSerializer})
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
-class RestaurantCreate(CreateAPIView):
+class FastFoodCreate(CreateAPIView):
     """
     post:
-        Returns a newly created Restaurant instance.
+        Created new fast-food.
     """
 
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
-    permission_classes = [IsAdmin,]
+    queryset = FastFood.objects.all()
+    serializer_class = FastFoodCreateUpdateSerializer
+    permission_classes = [IsAdminOrWaiter,]
 
-    @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={201: RestaurantSerializer})
+    @extend_schema(
+        tags=['api.v1 fastfood'],
+        request=FastFoodCreateUpdateSerializer,
+        responses={201: FastFoodCreateUpdateSerializer}
+    )
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
 
-class RestaurantDetail(RetrieveAPIView):
+class FastFoodDetail(RetrieveAPIView):
     """
     get:
-        Returns the detail of a restaurant instance.
+        Returns the detail of a fastfood instance.
 
         parameters: [pk]
     """
 
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
-    permission_classes = [IsAuthenticated,]
+    queryset = FastFood.objects.all()
+    serializer_class = FastFoodSerializer
+    permission_classes = [AllowAny,]
 
-    @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={200: RestaurantSerializer})
+    @extend_schema(tags=['api.v1 fastfood'], request=FastFoodSerializer, responses={200: FastFoodSerializer})
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
 
-class RestaurantUpdate(UpdateAPIView):
+class FastFoodUpdate(UpdateAPIView):
     """
     put:
         Update the detail of a restaurant instance
@@ -78,31 +79,39 @@ class RestaurantUpdate(UpdateAPIView):
         parameters: [pk]
     """
 
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
-    permission_classes = [IsAdmin,]
+    queryset = FastFood.objects.all()
+    serializer_class = FastFoodCreateUpdateSerializer
+    permission_classes = [IsAdminOrWaiter,]
 
-    @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={202: RestaurantSerializer})
+    @extend_schema(
+        tags=['api.v1 fastfood'],
+        request=FastFoodCreateUpdateSerializer,
+        responses={201: FastFoodCreateUpdateSerializer}
+    )
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={202: RestaurantSerializer})
+    @extend_schema(
+        tags=['api.v1 fastfood'],
+        request=FastFoodCreateUpdateSerializer,
+        responses={201: FastFoodCreateUpdateSerializer}
+    )
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
 
-class RestaurantDelete(DestroyAPIView):
+class FastFoodDelete(DestroyAPIView):
     """
     delete:
-        Delete a restaurant instance.
+        Delete a fast-food instance.
         
         parameters: [pk]
     """
 
-    queryset = Restaurant.objects.all()
-    serializer_class = RestaurantSerializer
-    permission_classes = [IsAdmin,]
+    queryset = FastFood.objects.all()
+    serializer_class = FastFoodSerializer
+    permission_classes = [IsAdminOrWaiter,]
 
-    @extend_schema(tags=['api.v1 Restaurant'], request=RestaurantSerializer, responses={204: RestaurantSerializer})
+    @extend_schema(tags=['api.v1 fastfood'], request=FastFoodSerializer, responses={200: FastFoodSerializer})
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

@@ -32,15 +32,12 @@ class UsersList(ListAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = UsersListSerializer
     permission_classes = [IsAdminOrWaiter,]
-    filterset_fields = ["user_type",]
     search_fields = ["phone", "first_name", "last_name",]
-    ordering_fields = ("id", "user_type",)
+    ordering_fields = ("id",)
 
     def get_queryset(self):
         return get_user_model().objects.values(
-            "id", "phone",
-            "first_name", "last_name",
-            "user_type",
+            "id", "phone", "first_name", "last_name",
         )
 
 
@@ -83,9 +80,9 @@ class UserProfile(RetrieveUpdateAPIView):
         Returns the profile of user.
 
     put:
-        Update the detail of a user instance, `passport` is required if `user_type='driver'`.
+        Update the detail of a user instance.
 
-        parameters: [first_name, last_name, gender, user_type, passport]
+        parameters: [first_name, last_name,]
     """
 
     queryset = get_user_model().objects.all()

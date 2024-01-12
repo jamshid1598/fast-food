@@ -21,6 +21,8 @@ class Restaurant(BaseModel):
 
 
 class FastFood(BaseModel):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='fastfoods',
+                                   blank=True, null=True, verbose_name=_('Restaurant'))
     image = models.ImageField(_("Image"), upload_to="fasd-food-images/", blank=True, null=True)
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"))

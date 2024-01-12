@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from users.models import Users, SMSToken, OTPStatus
+from users.models import Users, Employee, SMSToken, OTPStatus
 
 
 class UserAdmin(BaseUserAdmin):
@@ -12,7 +12,6 @@ class UserAdmin(BaseUserAdmin):
                 "first_name",
                 "last_name",
                 "phone",
-                "user_type",
                 "two_step_password",
             )
         }),
@@ -35,7 +34,7 @@ class UserAdmin(BaseUserAdmin):
     )
 
     list_display = (
-        'first_name', 'last_name', 'phone', 'user_type',
+        'first_name', 'last_name', 'phone',
         'two_step_password', 'is_staff', 'is_superuser', 'is_active',
         'last_login', 'updated_at', 'created_at',
     )
@@ -48,11 +47,17 @@ class UserAdmin(BaseUserAdmin):
         'two_step_password', 'is_staff', 'is_superuser', 'is_active',
         'updated_at', 'created_at',
     )
-    list_display_links = ('first_name', 'last_name', 'phone', 'user_type',)
+    list_display_links = ('first_name', 'last_name', 'phone',)
     search_fields = ('first_name', 'last_name', 'phone', 'passport',)
     filter_horizontal = ('groups', 'user_permissions',)
 
 admin.site.register(Users, UserAdmin)
+
+
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'restaurant', 'user_type')
+    list_display_links = ('id', 'user', 'restaurant', 'user_type')
 
 
 @admin.register(SMSToken)
