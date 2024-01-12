@@ -27,9 +27,12 @@ class ClientOrderList(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated,]
-    filterset_fields = ["restaurant", 'user', 'is_confirmed', 'is_completed']
+    filterset_fields = ["restaurant", 'user', 'status', 'status']
     search_fields = ["restaurant", 'user']
-    ordering_fields = ('id', 'user', 'is_confirmed', 'is_completed')
+    ordering_fields = ('id', 'user', 'status', 'status')
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
     @extend_schema(
         tags=['api.v1 Client-Orders'],

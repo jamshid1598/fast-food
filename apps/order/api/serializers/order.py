@@ -4,7 +4,7 @@ from order.models import Order, OrderItem
 from order.api.serializers.order_item import (
     OrderItemSerializer, CreateOrderItemSerializer,
 )
-from fastfood.api.serializers.fastfood import FastFoodOrderSerializer
+from order.utils import get_delivery_time
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['oreder_items'] = OrderItemSerializer(instance.orderitems.all(), many=True).data
+        data['order_items'] = OrderItemSerializer(instance.orderitems.all(), many=True).data
         return data
 
 
@@ -39,20 +39,26 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        exclude = ['is_completed', 'is_confirmed', "user"]
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['oreder_items'] = OrderItemSerializer(instance.orderitems.all(), many=True).data
-        return data
+        exclude = ['status', "user", "delivery_time"]
 
     def create(self, validated_data):
         user = self.context['request'].user
-        order_items = validated_data.pop('order_items')
+        order_items = validated_data.pop('order_items', None)
         instance = Order.objects.create(**validated_data, user=user)
+
         if order_items:
-            order_items = OrderItem.objects.create(**order_items, order=instance)
+            for item in order_items:
+                order_items = OrderItem.objects.create(**item, order=instance)
+
+        instance.delivery_time = get_delivery_time(instance)
+        instance.save(update_fields=['delivery_time'])
         return instance
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['order_items'] = OrderItemSerializer(instance.orderitems.all(), many=True).data
+        data['delivery_time'] = instance.delivery_time
+        return data
 
 
 class OrderUpdateSerializer(serializers.ModelSerializer):
@@ -60,22 +66,23 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        exclude = ["user"]
+        exclude = ["user", "delivery_time"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['oreder_items'] = OrderItemSerializer(instance.orderitems.all(), many=True).data
+        data['order_items'] = OrderItemSerializer(instance.orderitems.all(), many=True).data
+        data['delivery_time'] = instance.delivery_time
         return data
 
     def update(self, instance, validated_data):
-        order_items = validated_data.pop('order_items')
+        order_items = validated_data.pop('order_items', None)
         instance.restaurant = validated_data.get('restaurant') or instance.restaurant
         instance.total_price = validated_data.get('total_price') or instance.total_price
-        instance.is_confirmed = validated_data.get('is_confirmed') or instance.is_confirmed
-        instance.is_completed = validated_data.get('is_completed') or instance.is_completed
+        instance.status = validated_data.get('status') or instance.status
         instance.lon = validated_data.get('lon') or instance.lon
         instance.lat = validated_data.get('lat') or instance.lat
         instance.address = validated_data.get('address') or instance.address
+        instance.delivery_time = get_delivery_time(instance)
         instance.save()
 
         if order_items:
@@ -88,5 +95,8 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
                     OrderItem.objects.create(**item, order=instance)
 
             OrderItem.objects.filter(id__in=order_item_ids).delete()
+
+        instance.delivery_time = get_delivery_time(instance)
+        instance.save()
 
         return super(OrderUpdateSerializer, self).update(instance, validated_data)

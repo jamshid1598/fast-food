@@ -3,17 +3,24 @@ from django.utils.translation import gettext_lazy as _
 from users.models import BaseModel
 
 
+class OrderStatus(models.TextChoices):
+    WAITING = "waiting", _("Waiting")
+    CONFIRMED = "confiemd", _("Confirmed")
+    COMPLETED = "completed", _("Completed")
+    CANCELLED = "cancelled", _("Cancelled")
+
+
 class Order(BaseModel):
     restaurant = models.ForeignKey('fastfood.Restaurant', on_delete=models.SET_NULL, related_name='orders',
                              blank=True, null=True, verbose_name='Restaurant')
     user = models.ForeignKey('users.Users', on_delete=models.SET_NULL, related_name='orders',
                              blank=True, null=True, verbose_name='User')
     total_price = models.FloatField(_('Total price'), default=0.0)
-    is_confirmed = models.BooleanField(_('Is confirmed'), default=False)
-    is_completed = models.BooleanField(_('Is completed'), default=False)
+    status = models.CharField(_('Status'), max_length=100, choices=OrderStatus.choices, default=OrderStatus.WAITING)
     lon = models.FloatField(_('Longitute'), default=0.0)
     lat = models.FloatField(_('Latitude'), default=0.0)
     address = models.CharField(_('Address'), max_length=255, blank=True, null=True)
+    delivery_time = models.CharField(_('Delivery time'), max_length=50)
 
     class Meta:
         db_table = 'order_order'

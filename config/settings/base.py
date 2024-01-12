@@ -166,6 +166,8 @@ EXPIRY_TIME_OTP = 300
 ESKIZ_EMAIL = os.environ.get('ESKIZ_EMAIL', default='')
 ESKIZ_PASSWORD = os.environ.get('ESKIZ_PASSWORD', default='')
 
+OPENROUTE_API_KEY = os.environ.get('OPENROUTE_API_KEY', default='')
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",

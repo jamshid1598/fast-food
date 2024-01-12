@@ -25,9 +25,9 @@ class OrderList(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminOrWaiter,]
-    filterset_fields = ["restaurant", 'user', 'is_confirmed', 'is_completed']
+    filterset_fields = ["restaurant", 'user', 'status', 'status']
     search_fields = ["restaurant", 'user']
-    ordering_fields = ('id', 'user', 'is_confirmed', 'is_completed')
+    ordering_fields = ('id', 'user', 'status', 'status')
 
     @extend_schema(
         tags=['api.v1 Order'],
@@ -68,7 +68,7 @@ class OrderUpdate(UpdateAPIView):
     """
 
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderUpdateSerializer
     permission_classes = [IsAdminOrWaiter,]
 
     @extend_schema(tags=['api.v1 Order'], request=OrderUpdateSerializer, responses={202: OrderUpdateSerializer})
