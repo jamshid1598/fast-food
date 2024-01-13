@@ -14,6 +14,6 @@
 ## dumpdata and loaddata
 
 - _export data to fixture file_ `docker-compose -f dc-dev.yml run --rm backend python3 manage.py dumpdata <app>.<model> --indent 4 > apps/<app>/fixtures/<filename>.json`
-- _import data from fixture file_ `docker-compose -f dc-prod.yml run --rm backend python3 manage.py loaddata apps/<app>/fixtures/<filename>.json`
+- _import data from fixture file_ `docker-compose -f dc-dev.yml run --rm backend python3 manage.py loaddata apps/<app>/fixtures/<filename>.json`
 
 
