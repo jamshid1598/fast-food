@@ -27,7 +27,7 @@ def get_distance(order):
     print([restaurant_location, client_location])
 
     if not all(restaurant_location + client_location):
-        return None
+        return 0
 
     error_msg = "Unknown Error"
     body = {"coordinates": [restaurant_location, client_location]}
